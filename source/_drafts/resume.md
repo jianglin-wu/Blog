@@ -1,6 +1,8 @@
 ---
 title: "编写高质量的简历"
+categories: 杂谈
 tags:
+- 简历
 ---
 
 解释：

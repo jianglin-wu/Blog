@@ -1,6 +1,9 @@
 ---
 title: "关于 Hexo 中的代码高亮"
-tags: "blog hexo"
+categories: 技术杂谈
+tags:
+- blog
+- hexo
 ---
 
 ## Lib

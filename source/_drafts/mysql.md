@@ -1,6 +1,9 @@
 ---
 title: "开坑记录一些 mysql 方面的知识"
+categories: 服务端
 tags:
+- 数据库
+- MySQL
 ---
 
 

@@ -1,8 +1,10 @@
 ---
 title: 使用 Docker 部署
 date: 2017-09-09 20:51:02
-categories: 容器
-tags: docker
+categories: 系统运维
+tags:
+- docker
+- 容器
 ---
 
 为了应用之间的隔离与独立，我们使用 Docker 对应用进行部署。

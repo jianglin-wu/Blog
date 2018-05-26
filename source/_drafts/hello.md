@@ -2,8 +2,8 @@
 title: Hello World
 date: 2013-12-24 23:30:09
 photos:
-- https://olnzpdi2u.bkt.clouddn.com/DSCF3974-1.jpg
-link: http://www.google.com/
+- https://placehold.it/1000x150.jpg
+<!-- link: http://www.google.com/ -->
 ---
 
 ![Small Picture](https://placehold.it/350x150.jpg)

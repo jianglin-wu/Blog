@@ -1,11 +1,9 @@
 ---
 title: 前端应用如何指定编译环境与运行环境？
 date: 2018-04-25 14:03:00
-categories: React
+categories: 前端
 tags:
-- roadhog
-- dva
-- antdPro
+- 编译打包
 ---
 
 ## 开始之前

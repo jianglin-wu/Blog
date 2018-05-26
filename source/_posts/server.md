@@ -1,7 +1,7 @@
 ---
 title: 使家庭网络作为服务器
 date: 2017-09-08 13:14:02
-categories: 个人开发
+categories: 系统运维
 tags: 服务器
 ---
 
