@@ -86,11 +86,11 @@ $ mount /dev/sdb5 /mnt # /dev/sdb5 挂载的磁盘，/mnt 挂载的目录
 
 
 
-### 修改系统文件
+### 取消挂载磁盘
 
 假如我们已经找到了系统所在的磁盘，并且已经挂载到系统上。接着我们修改该磁盘的 `etc/fstab` 文件，使用 `vi` 或 `vim` 发现系统上并没有安装。执行 `apt-get install vi vim` 你会发现找不到这个包，执行 `apt-get update` 也没有下载源，你难道想到了配置下载源？你是要下载一个浏览器 copy 进去还是一字一键的敲进去？
 
-解决办法是使用 [HERE document](https://my.oschina.net/u/1032146/blog/146941)，另外注意备份文件：
+答案是使用 [HERE document](https://my.oschina.net/u/1032146/blog/146941)：
 
 ```bash
 $ cd /media/jianglin-wu/0d0dbfa7-d1c7-496b-96bc-dca05efb5b48/etc # 进入磁盘所在目录
