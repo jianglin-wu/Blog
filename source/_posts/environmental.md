@@ -8,13 +8,13 @@ tags:
 
 ## 开始之前
 
-**程序的环境指的是什么？**
+### 程序的环境指的是什么？
 
 这答案很宽泛，在前端应用中大多指 `JavaScript` 的执行上下文，在代码执行的时候需要知道当前处于哪种状态？当前能做什么？应该做什么？
 
 
 
-**代码运行中会遇到哪些环境？**
+### 代码运行中会遇到哪些环境？
 
 客观上的不同：
 
@@ -35,7 +35,7 @@ tags:
 
 
 
-**为什么要人为的定义不同的运行环境？**
+### 为什么要人为的定义不同的运行环境？
 
 为了区分出以下列出的不同情况：
 
@@ -49,10 +49,11 @@ tags:
 
 
 
+
 ## 准备开始
 
 
-**了解环境变量的用法**
+### 了解环境变量的用法
 
 定义：
 
@@ -105,17 +106,15 @@ $ cross-env NODE_ENV=production node app.js
 ```
 
 
-**了解并使用 npm script：**
+### 了解并使用 `npm script`：
 
 `npm` 支持将命令行写到 `package.json` 的 `script` 中，使用 `npm run [属性名]` 便可运行对应的命令，并且会将当前目录下 `node_modules/.bin/` 添加到 `PATH` 变量里。详细描述请参考阮一峰[《npm script 使用指南》](http://www.ruanyifeng.com/blog/2016/10/npm_scripts.html)
 
-```javascript
+```json
 {
-  // ...
   "scripts": {
     "start": "node server.js",
-  },
-  // ...
+  }
 }
 ```
 
@@ -123,7 +122,7 @@ $ cross-env NODE_ENV=production node app.js
 
 ## 开始配置
 
-**应用的运行环境：**
+### 应用的运行环境：
 
 <!-- 根据[规范](http://git.highso.com.cn:81/fe/fe-blog/issues/12#%E9%A1%B9%E7%9B%AE%E8%84%9A%E6%9C%AC%E8%A7%84%E8%8C%83)整理对应的环境，以及使用时所用的命令： -->
 
@@ -138,13 +137,14 @@ $ cross-env NODE_ENV=production node app.js
 * 性能测试: `npm run build:perf`
 * 线上环境: `npm run build:prod`
 
-**调试模式：**
+
+### 调试模式：
 
 通过一个变量，对任意环境标识是否处于调试模式。当任意环境处于调试模式时，可以根据实际需求进行日志的打印、配置的调整、Map 的生成等。
 
 
 
-**用变量去标识：**
+## 用变量去标识：
 
 * `NODE_ENV`：默认在构建工具中就定义的变量，一般仅存在 `development` 和 `production` 两种值。
 * `NODE_STAGE`：我们手动新增的变量，可以配置为任何字符串，按照应用环境的定义设置为 `dev` | `test1` | `test0` | `reg` | `stage` | `pref` | `prod` 七种值，如果不设置则为 `undefined`。
@@ -152,7 +152,7 @@ $ cross-env NODE_ENV=production node app.js
 
 
 
-**定义环境变量到编译环境：**
+### 定义环境变量到编译环境：
 
 以下命令定义了一个 `DISABLE_ESLINT` 变量，同时启动了构建打包工具。需注意此时定义的变量在编译环境可以访问，但在运行环境访问不到该变量。
 
@@ -163,7 +163,7 @@ $ cross-env DISABLE_ESLINT=true roadhog dev
 $ cross-env DISABLE_ESLINT=true webpack
 ```
 
-**通过环境变量为运行环境定义全局常量：**
+### 通过环境变量为运行环境定义全局常量：
 
 这里使用 [DefinePlugin](https://webpack.docschina.org/plugins/define-plugin/) 插件进行配置，它允许在编译时生成自定义的全局常量。以下是两种构建工具的配置方式。
 
@@ -193,7 +193,7 @@ plugins: [
 ]
 ```
 
-**使用全局常量**
+### 使用全局常量
 
 项目在编译后全局常量的值就会替换到生成的文件中了，使用全局常量便可实现动态选择连接后台服务器地址等等操作。
 
@@ -223,13 +223,12 @@ export const API_URL = apiUrls[ENV_NAME];
 ```
 
 
-**设置命令别名**
+### 设置命令别名
 
 设置好别名之后就算是完成配置了，这时就可以在如 Jenkins 上的不同环境直接写入对应的 Bash 指令。
 
-```javascript
+```json
 {
-  // ...
   "scripts": {
     "start": "cross-env DISABLE_ESLINT=true roadhog dev",
     "build:dev": "cross-env NODE_STAGE=dev DISABLE_ESLINT=true roadhog build",
@@ -238,15 +237,19 @@ export const API_URL = apiUrls[ENV_NAME];
     "build:reg": "cross-env NODE_STAGE=reg DISABLE_ESLINT=true roadhog build",
     "build:stage": "cross-env NODE_STAGE=stage DISABLE_ESLINT=true roadhog build",
     "build:perf": "cross-env NODE_STAGE=perf DISABLE_ESLINT=true roadhog build",
-    "build:prod": "cross-env DISABLE_ESLINT=true roadhog build",
-    // "start:debug": "cross-env DEBUG=http://192.168.x.x:8888/ npm run start",
+    "build:prod": "cross-env DISABLE_ESLINT=true roadhog build"
   },
-  // ...
 }
 ```
 
+调试时使用以下命令，`DEBUG` 的值可以是布尔的字符串值，也可以是服务器的接口地址，根据自己的需要去解析：
 
-**保持原则**
+```bash
+$ cross-env DEBUG=http://192.168.x.x:8888/ npm run start
+```
+
+
+### 保持原则
 
 * 配置尽量集中化，比如将所有常量统一写入到 `src/common/constant.js` 文件下。
 * 各环境常量可以变化，但业务逻辑必须高度一致，否则测试环境只能是摆设。
@@ -255,13 +258,14 @@ export const API_URL = apiUrls[ENV_NAME];
 
 ## 相关实践
 
-**按配置动态生成 HTML（Roadhog 配置方式）**
+### 按配置动态生成 HTML（Roadhog 配置方式）
 
 使用 OAuth 开发的单点登录应用会有一个 `refresh.html` 文件，这个文件会调取服务端接口更新会话状态。它内部有一个服务器地址，我们希望这个地址可以从配置文件中读取。我们可以添加 `webpack.config.js` 文件，Roadhog 工具可以通过这个文件对最后实例化的配置进行修改。我们使用 [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin) 插件来生成 HTML，首先需要安装它：
 
 ```bash
 $ npm install -D html-webpack-plugin
 ```
+
 然后在获取到 Webpack 实例化配置时，将该插件追加到 `webpackConfig.plugins` 插件列表中，此时 `refresh.html` 重定向服务器地址便可从配置文件中拿取。
 
 ```javascript
@@ -279,7 +283,7 @@ module.exports = function (webpackConfig, env) {
     }));
   }
   return webpackConfig;
-}
+};
 ```
 
 在上面的步骤中已经拿到了配置信息，而下面这一步是修改 HTML 模板将内容生成出来。`src` 目录下有一个 `index.ejs` 文件，这是 `index.html` 的模板文件。现在我们需要生成 `refresh.html` 文件，与 `index.html` 共用一个模板文件，所以将下面内容添加到 `src/index.ejs` 文件 `head` 元素中。
@@ -304,7 +308,7 @@ module.exports = function (webpackConfig, env) {
   <!-- ... -->
 ```
 
-**正确获取开发环境 Host 地址，并用浏览器自动打开该地址（Roadhog 配置方式）:**
+### 正确获取开发环境 Host 地址，并用浏览器自动打开该地址（Roadhog 配置方式）:
 
 多数构建工具开发模式下启动时都会从浏览器中自动打开，但一般都是以 `localhost` 作为访问地址，或者以 IP 地址作为 Host 时，在有多个虚拟网卡的情况下获取的 IP 地址往往不是我们想要的地址。如果移动设备或其他设备访问当前的服务，在进行登录跳转时就会跳到不能访问的地址，导致应用无法访问或登录。
 
@@ -363,7 +367,7 @@ module.exports = function (webpackConfig) {
     }));
   }
   return webpackConfig;
-}
+};
 ```
 
 
@@ -373,6 +377,6 @@ module.exports = function (webpackConfig) {
 
 日期： 2018年4月28日
 
-更新： 2018年8月17日
+更新： 2018年8月28日
 
 （完）

@@ -92,7 +92,7 @@ $ mount /dev/sdb5 /mnt # /dev/sdb5 挂载的磁盘，/mnt 挂载的目录
 
 答案是使用 [HERE document](https://my.oschina.net/u/1032146/blog/146941)：
 
-```bash
+```
 $ cd /media/jianglin-wu/0d0dbfa7-d1c7-496b-96bc-dca05efb5b48/etc # 进入磁盘所在目录
 $ cp fstab fstab.bak # 备份文件
 $ cat fstab # 查看原配置
