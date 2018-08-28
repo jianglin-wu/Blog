@@ -129,7 +129,7 @@ $ mv rc.local rc.local-old  # 将其重命名其他名字，启动时先不让�
 
 下面的命令是挂载磁盘，实际上你在挂载损坏的磁盘时会抛出异常，如果下面这样：
 
-```
+```bash
 $ mount /dev/sdb5 /mnt
 # 挂载损坏的磁盘这里会报错
 mount: /dev/sdb5: can't read superblock
