@@ -1,5 +1,6 @@
 ---
 title: "Linux 快捷图标启动程序时如何设置环境变量"
+date: "2018-11-22 10:34:00"
 categories: 技术杂谈
 tags:
 - Linux
