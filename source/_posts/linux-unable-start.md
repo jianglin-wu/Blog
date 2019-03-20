@@ -13,7 +13,7 @@ tags:
 
 重启过程中进入了下面这个界面，无论怎么敲回车继续、还是 Ctrl+D、还是其他方式，结果都是再次进入到了这个界面。图片是在[这里](https://bbs.deepin.org/forum.php?mod=viewthread&tid=146086)拿的，我也试着按这个帖子提出方案解决，不过信息不够完整，场景也有一定差别。
 
-![](https://bbs.deepin.org/data/attachment/forum/201709/27/213213xu8tiepr9t5gxxpe.jpg)
+[![5fa96056cf77de798756325166fcd743.md.jpg](https://psyduck.top/images/2019/03/20/5fa96056cf77de798756325166fcd743.md.jpg)](https://psyduck.top/image/o6eB)
 
 
 
