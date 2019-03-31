@@ -13,15 +13,15 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://jianglin-wu.github.io/
+url: https://hahhub.com/
 root: /
 permalink: :year/:month/:title/
 permalink_defaults:
 
 cdn:
   enable: true
-  base: //image-cdn.hahhub.com/
-  tail: v20190320
+  base: //blog-cdn.hahhub.com/
+  # tail: v20190320
 
 # Directory
 source_dir: source
