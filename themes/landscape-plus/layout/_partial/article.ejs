@@ -83,7 +83,7 @@
         admin: ['<%= theme.gitalk.adminUser %>'],
         // id: id,
         id: location.pathname,
-        distractionFreeMode: '<%= theme.gitalk.distractionFreeMode %>'
+        distractionFreeMode: <%= theme.gitalk.distractionFreeMode %>
       });
 
       gitalk.render('gitalk-container');
