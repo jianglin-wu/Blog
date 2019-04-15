@@ -32,7 +32,7 @@ gitalk:
   ClientID: abbd1bd4898140bf47c3
   ClientSecret: 6382e9ab7130fcd3756b7d15679948d65184b148
   adminUser: jianglin-wu
-  distractionFreeMode: true
+  distractionFreeMode: false
 
 # Miscellaneous
 google_analytics: UA-119970863-1
