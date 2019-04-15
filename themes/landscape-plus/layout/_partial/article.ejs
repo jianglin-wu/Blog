@@ -22,6 +22,24 @@
         <%- post.content %>
       <% } %>
     </div>
+
+    <div id="gitalk-container"></div>
+    <script>
+      var titleDom = document.querySelector('h1.article-title');
+      var id = titleDom ? titleDom.innerText.trim() : location.pathname;
+      var gitalk = new Gitalk({
+        clientID: 'abbd1bd4898140bf47c3',
+        clientSecret: '6382e9ab7130fcd3756b7d15679948d65184b148',
+        repo: 'jianglin-wu.github.io',
+        owner: 'jianglin-wu',
+        admin: ['jianglin-wu'],
+        id: id,
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+    </script>
+
     <footer class="article-footer">
       <% if (config.baidushare || theme.baidushare){ %>
         <a data-url="<%- post.permalink %>" data-id="<%= post._id %>" class="article-share-link" data-share="baidu" data-title="<%= post.title %>"><%= __('share') %></a>
