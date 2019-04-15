@@ -19,26 +19,20 @@
           </p>
         <% } %>
       <% } else { %>
-        <%- post.content %>
+        <!-- post.content -->
+        <% var br = post.content.indexOf('\n') %>
+        <% if(br < 0 || !index) { %>
+          <%- post.content %>
+        <% } else { %>
+          <%- post.content.substring(0, br) %>
+          <% if (theme.excerpt_link) { %>
+            <p class="article-more-link">
+              <a href="<%- config.root %><%- post.path %>#more"><%= theme.excerpt_link %></a>
+            </p>
+          <% } %>
+        <% } %>
       <% } %>
     </div>
-
-    <div id="gitalk-container" style="padding: 0 20px;"></div>
-    <script>
-      var titleDom = document.querySelector('h1.article-title');
-      var id = titleDom ? titleDom.innerText.trim() : location.pathname;
-      var gitalk = new Gitalk({
-        clientID: 'abbd1bd4898140bf47c3',
-        clientSecret: '6382e9ab7130fcd3756b7d15679948d65184b148',
-        repo: 'jianglin-wu.github.io',
-        owner: 'jianglin-wu',
-        admin: ['jianglin-wu'],
-        id: id,
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
-
-      gitalk.render('gitalk-container')
-    </script>
 
     <footer class="article-footer">
       <% if (config.baidushare || theme.baidushare){ %>
@@ -71,4 +65,28 @@
       <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </div>
   </section>
+<% } else if (!index && post.comments && theme.gitalk.enable) { %>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <section id="comments">
+    <div id="gitalk-container" style="padding: 0 20px;"></div>
+  </section>
+  <script>
+    (function() {
+      // var titleDom = document.querySelector('h1.article-title');
+      // var id = titleDom ? titleDom.innerText.trim() : location.pathname;
+      var gitalk = new Gitalk({
+        clientID: '<%= theme.gitalk.ClientID %>',
+        clientSecret: '<%= theme.gitalk.ClientSecret %>',
+        repo: '<%= theme.gitalk.repo %>',
+        owner: '<%= theme.gitalk.githubID %>',
+        admin: ['<%= theme.gitalk.adminUser %>'],
+        // id: id,
+        id: location.pathname,
+        distractionFreeMode: '<%= theme.gitalk.distractionFreeMode %>'
+      });
+
+      gitalk.render('gitalk-container');
+    })()
+  </script>
 <% } %>

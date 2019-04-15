@@ -22,8 +22,17 @@ widgets:
 # Links
 links: 
   Github: https://github.com/jianglin-wu
-  YApi 工具: http://132.232.51.241:3000
-  图床工具: http://image.sv-1.psyduck.top
+  YApi 工具: https://yapi.sv-0.hahhub.com
+  图床工具: http://image.hahhub.com
+
+gitalk:
+  enable: true
+  githubID: jianglin-wu
+  repo: jianglin-wu.github.io
+  ClientID: abbd1bd4898140bf47c3
+  ClientSecret: 6382e9ab7130fcd3756b7d15679948d65184b148
+  adminUser: jianglin-wu
+  distractionFreeMode: true
 
 # Miscellaneous
 google_analytics: UA-119970863-1
