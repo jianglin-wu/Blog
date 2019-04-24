@@ -19,7 +19,7 @@ SSH 端口转发是一个特别强大好用的功能，这里将自己整理的�
 
 可作为跳板机访问其他设备等
 
-```
+```shell
 $ ssh -N -L 2222:host1:22 host2
 ```
 
@@ -32,7 +32,7 @@ $ ssh -N -L 2222:host1:22 host2
 
 可用于内网穿透
 
-```
+```shell
 $ ssh -N -R 8080:localhost:80 host1
 ```
 
@@ -48,7 +48,7 @@ GatewayPorts yes
 
 重启 sshd，然后重新执行转发命令：
 
-```
+```shell
 $ service ssh restart
 # or
 $ systemctl restart sshd.service
@@ -63,7 +63,7 @@ $ systemctl restart sshd.service
 
 当然，此代理配合 SwitchyOmege Chrome 插件使用应该是绝配。命令行 curl 等 可以通过 `export http_proxy=proxy_addr:port` 来访问。
 
-```
+```shell
 $ ssh -D <local port> <SSH Server>
 ```
 
@@ -74,7 +74,7 @@ $ ssh -D <local port> <SSH Server>
 
 打算找个时间玩玩，对比一下 VNC
 
-```
+```shell
 $ export DISPLAY=<X Server IP>:<display #>.<virtual #>
 ```
 
@@ -89,7 +89,7 @@ $ export DISPLAY=<X Server IP>:<display #>.<virtual #>
 
 macOS:
 
-```
+```shell
 $ brew install autossh
 ```
 
@@ -102,7 +102,7 @@ $ brew install autossh
 
 云服务大多配置了防火区与安全组，访问时确保不被拦截，下面是 `iptables` 例子：
 
-```
+```shell
 $ sudo iptables -I INPUT -p tcp --dport 6766 -j ACCEPT
 ```
 
