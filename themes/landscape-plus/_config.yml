@@ -22,8 +22,8 @@ widgets:
 # Links
 links: 
   Github: https://github.com/jianglin-wu
-  YApi 工具: https://yapi.sv-0.hahhub.com
-  图床工具: http://image.hahhub.com
+  YApi: https://yapi.sv-0.hahhub.com
+  Chevereto: http://image.hahhub.com
 
 gitalk:
   enable: true
