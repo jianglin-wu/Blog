@@ -20,5 +20,5 @@ date: 2018-04-25 14:03:00
 
 ### 社交
 
-E-mail: [wjiangl.id@gmail.com](mailto:wjiangl.id@gmail.com)
 Github: [jianglin-wu](https://github.com/jianglin-wu)
+E-mail: [wjiangl.id@gmail.com](mailto:wjiangl.id@gmail.com)
