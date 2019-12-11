@@ -20,10 +20,10 @@ widgets:
 - links
 
 # Links
-links: 
+links:
   Github: https://github.com/jianglin-wu
-  YApi: https://yapi.sv-0.hahhub.com
-  Chevereto: https://image.hahhub.com
+  # YApi: https://yapi.sv-0.hahhub.com
+  # Chevereto: https://image.hahhub.com
 
 gitalk:
   enable: true
