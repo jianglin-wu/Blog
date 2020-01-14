@@ -1,62 +1,45 @@
 ---
-title: "前端应用如何指定编译环境与运行环境？"
+title: "为前端应用指定不同环境"
 date: "2018-04-25 14:03:00"
 categories: 前端
 tags:
-- 编译打包
+- 构建打包
+- 环境变量
 ---
 
-## 开始之前
+## 介绍
 
-### 程序的环境指的是什么？
+### 程序当中的环境指的是什么？
 
-这答案很宽泛，在前端应用中大多指 `JavaScript` 的执行上下文，在代码执行的时候需要知道当前处于哪种状态？当前能做什么？应该做什么？
+这答案很宽泛，影响代码执行上下文的因素都可以称为环境，在代码执行的时候需要知道当前处于哪种状态？当前能做什么？应该做什么？比如说下列环境的不同，可以会导致程序运行的结果不一致。
+- 执行环境（编译状态的 Node.js 环境、页面渲染和交互逻辑的浏览器环境）。
+- 操作系统（Linux/Windows/Mac OS/Android/IOS）。
+- 浏览器（MS/FF/GC）。
+- 设备（Mobile/Pad/PC）。
+- 分辨率（720/1080/2K/4K/5K）
+- 以及各平台的版本。
 
-
-
-### 代码运行中会遇到哪些环境？
-
-客观上的不同：
-
-* 执行环境(编译状态的 Node.js 环境、页面渲染和交互逻辑的浏览器环境)。
-* 操作系统(Linux/Windows/Mac OS/Android/IOS)。
-* 浏览器(MS/FF/GC)。
-* 设备(Mobile/Pad/PC)。
-* 分辨率(720/1080/2K/4K/5K)
-* 以及各平台的版本。
+但今天的话题主要是谈论下面几种环境
+- 本地开发环境：编译代码到内存、启动本地开发服务器和 `Mock` 数据、监听文件修改热更新等。
+- 线上生产环境：对代码压缩混淆，去除注释和警告信息，生成代码文件与 Map 文件。
+- 应用的环境：应用会部署在线上、预上线、测试等多个环境，他们的代码基本一致，仅 API 和配置参数不一样。
 
 
-主观上的不同：
-
-1. 本地开发环境：编译代码到内存、运行本地 `Server` 和 `Mock` 数据、监听文件修改进行热更新。
-2. 线上生产环境：对代码压缩混淆，去除注释，去除警告，生成文件与 Map 文件。
-3. 测试环境：与线上环境高度一致，但连接的是测试服务器。
-4. DEBUG 模式：在生产环境与测试环境开启调试模式时生成 Map 或者打印日志等。开发环境下打开调试模式时命令行指定后端调试服务器等。
-
-
-
-### 为什么要人为的定义不同的运行环境？
+### 为什么要定义不同的运行环境？
 
 为了区分出以下列出的不同情况：
-
-1. 服务器地址不同：测试服务器，线上服务器，以及后端开发启动的服务器(后端找不到 BUG 断点调试时用的[严肃脸])。
-2. 地址跳转：单点登录跳转不同环境的登录页。
-2. 使用 CDN 的应用：项目文件 Base URL 在开发环境为 `/`、测试为 `https://test.cdn.com/`，在生产环境为 `https://www.cdn.com/` 等。
-3. 第三方接入：如第三方聊天的 SDK 需要使用一些 Key 鉴权，应该对 Key 进行区分，否则会造成在测试环境的消息发送到生产环境中。
-4. 线上环境为 HTTPS 协议：并不是所有情况下都能通过 `//:` 方式获取资源，所以还是有必要区分该用 `http://` 还是 `https//`。
-5. 前端监控：记录应用运行报错是在生产环境出现的还是测试环境出现的，或者仅仅只是在生产环境才进行监控。
-6. 部分新功能仅对测试和开发环境开放：对于还不稳定的功能在生产环境打包时忽略或隐藏入口（不推荐这样用）。
+1. 服务器地址不同：线上服务器地址，不同测试环境的服务器地址。
+1. 地址跳转：单点登录跳转需要携带的不同环境的登录页地址。
+1. CDN 加速域名：本地开发环境一般是相对路径 `/`、测试环境和线上环境是分别不同的域名。
+1. 第三方配置：比如聊天上传等，应该对配置进行区分，否则会造成在测试环境的消息发送到线上环境中。
+1. 前端监控：记录应用运行报错是在生产环境出现的还是测试环境出现的，或者仅仅只是在生产环境才进行监控。
 
 
-
-
-## 准备开始
-
+## 正文
 
 ### 了解环境变量的用法
 
-定义：
-
+以下定义了一个 `NODE_ENV` 环境变量，它的值为字符串 `production`。
 ```bash
 # Linux/Mac OS
 $ NODE_ENV=production
@@ -68,8 +51,7 @@ $ set NODE_ENV=production
 > process.env.NODE_ENV=production
 ```
 
-取值：
-
+以下从系统中读取了一个 `NODE_ENV` 环境变量，并且打印出来。
 ```bash
 # Linux/Mac OS: $PATH 或 ${PATH}
 $ echo $PATH
@@ -81,7 +63,8 @@ $ echo %PATH%
 > console.log(process.env.PATH)
 ```
 
-跨平台设置环境变量工具 `cross-env` ：
+
+由于 Windows、Linux、Mac 设置环境变量不一致，可以使用 `cross-env` 来跨平台设置环境变量，设置后就可以在 Node.js 中读取出来。
 
 ```bash
 # 安装
@@ -93,15 +76,17 @@ $ cross-env NODE_ENV=production DEBUG=true
 $ cross-env NODE_ENV=production node app.js
 ```
 
-注意 `cross-env` 定义的变量生命周期仅在同一条命令中有效，使用 `&&` 或 `;` 分隔的多条命令将访问不到设置的值。
+注意 `cross-env` 定义的变量生命周期仅在同一条命令中有效，使用 `&&` 或 `;` 分隔的多条命令将访问不到上一个命令设置的值。
 
 ```bash
-# 使用 `&&` 或 `;` 合并的命令无法读取到变量
+# ❌ 错误的用法
+# 使用 `&&` 分隔
 $ cross-env NODE_ENV=production && node app.js
-# or
+# 使用 `;` 分隔
 $ cross-env NODE_ENV=production; node app.js
 
-# 正确的方式使用空格隔开
+# ✅ 正确的用法
+# 使用空格隔开
 $ cross-env NODE_ENV=production node app.js
 ```
 
@@ -119,75 +104,49 @@ $ cross-env NODE_ENV=production node app.js
 ```
 
 
-
 ## 开始配置
 
 ### 应用的运行环境：
 
-<!-- 根据[规范](http://git.highso.com.cn:81/fe/fe-blog/issues/12#%E9%A1%B9%E7%9B%AE%E8%84%9A%E6%9C%AC%E8%A7%84%E8%8C%83)整理对应的环境，以及使用时所用的命令： -->
-
 根据实际情况整理应用需要的运行环境，对每个环境命名，以及使用时所用的命令：
 
 * 本地开发环境：`npm run start`
-* 开发环境: `npm run build:dev`
-* test1 环境: `npm run build:test1`
-* test0 环境: `npm run build:test0`
-* 回归测试: `npm run build:reg`
+* 测试环境: `npm run build:test`
 * 预上线: `npm run build:stage`
-* 性能测试: `npm run build:perf`
 * 线上环境: `npm run build:prod`
 
 
-### 调试模式：
+或者提前在打包每个环境的代码前定义变量（如编写在 `~/.bashrc`），临时变量可以以下方式指定。
 
-通过一个变量，对任意环境标识是否处于调试模式。当任意环境处于调试模式时，可以根据实际需求进行日志的打印、配置的调整、Map 的生成等。
-
+* 本地开发环境：`npm run start`
+* 测试环境: `cross-env NODE_STAGE=test npm run build`
+* 预上线: `cross-env NODE_STAGE=stage npm run build`
+* 线上环境: `cross-env NODE_STAGE=prod npm run build`
 
 
 ## 用变量去标识：
 
 * `NODE_ENV`：默认在构建工具中就定义的变量，一般仅存在 `development` 和 `production` 两种值。
-* `NODE_STAGE`：我们手动新增的变量，可以配置为任何字符串，按照应用环境的定义设置为 `dev` | `test1` | `test0` | `reg` | `stage` | `pref` | `prod` 七种值，如果不设置则为 `undefined`。
-* `DEBUG`：我们手动新增的变量，按自己的需求随意配置，可配置为 `true` 或 `false`，值也可以是接口服务器 `URL`，如果不设置则为 `undefined`。
-
+* `NODE_STAGE`：我们手动新增的变量，可以配置为任何字符串，按照应用环境的定义设置为 `test`、`stage`、`prod`，如果不设置则为 `undefined`。
 
 
 ### 定义环境变量到编译环境：
 
-以下命令定义了一个 `DISABLE_ESLINT` 变量，同时启动了构建打包工具。需注意此时定义的变量在编译环境可以访问，但在运行环境访问不到该变量。
+比如以下命令定义了一个 `DISABLE_ESLINT` 变量，同时启动了构建打包工具。注意此时定义的环境变量仅在构建环境的 Node.js 中可访问，在应用的运行时环境访问不到该变量。
 
 ```bash
-# Roadhog：
-$ cross-env DISABLE_ESLINT=true roadhog dev
 # Webpack:
 $ cross-env DISABLE_ESLINT=true webpack
 ```
 
 ### 通过环境变量为运行环境定义全局常量：
 
-这里使用 [DefinePlugin](https://webpack.docschina.org/plugins/define-plugin/) 插件进行配置，它允许在编译时生成自定义的全局常量。以下是两种构建工具的配置方式。
-
-Roadhog：在配置文件中添加以下配置便可直接生效（`roadhog@1.x` 及以前版本为 `roadhogrc.js` 文件，`roadhog@2.x` 及之后版本为 `.webpackrc.js` 文件），[查看 define 配置文档](https://github.com/sorrycc/roadhog/blob/master/README_zh-cn.md#define)。
-
-```javascript
-export default {
-  // ...
-  "define": {
-    "process.env.NODE_ENV": process.env.NODE_ENV,
-    "process.env.DEBUG": process.env.DEBUG,
-    "process.env.NODE_STAGE": process.env.NODE_STAGE,
-  },
-  // ...
-}
-```
-
-Webpack: 在配置文件的插件列表下添加以下配置。
+这里使用 [DefinePlugin](https://webpack.docschina.org/plugins/define-plugin/) 插件进行配置，它允许在编译时生成自定义的全局常量。只需要在配置文件的插件列表下添加以下配置。
 
 ```javascript
 plugins: [
   new webpack.DefinePlugin({
     "process.env.NODE_ENV": process.env.NODE_ENV,
-    "process.env.DEBUG": process.env.DEBUG,
     "process.env.NODE_STAGE": process.env.NODE_STAGE,
   })
 ]
@@ -198,23 +157,17 @@ plugins: [
 项目在编译后全局常量的值就会替换到生成的文件中了，使用全局常量便可实现动态选择连接后台服务器地址等等操作。
 
 ```javascript
-const debug = process.env.DEBUG;
 const nodeStage = process.env.NODE_STAGE;
 const nodeEnv = process.env.NODE_ENV;
 
 // 根据常量获取当前环境名称
-const ENV_NAME = debug ? 'debug' : (nodeStage || nodeEnv);
+const ENV_NAME = nodeStage || nodeEnv;
 
 // 每个环境的服务器地址
 const apiUrls = {
-  debug: debug || '',
   development: 'http://api.xxx.dev.domain.com/',
-  dev: '',
-  test1: 'http://api.xxx.test1.domain.com/',
-  test0: 'http://api.xxx.test0.domain.com/',
-  reg: 'http://api.xxx.reg.domain.com/',
+  test: 'http://api.xxx.test.domain.com/',
   stage: 'http://api.xxx.stage.domain.com/',
-  perf: '',
   production: 'http://api.xxx.domain.com/',
 };
 
@@ -231,21 +184,11 @@ export const API_URL = apiUrls[ENV_NAME];
 {
   "scripts": {
     "start": "cross-env DISABLE_ESLINT=true roadhog dev",
-    "build:dev": "cross-env NODE_STAGE=dev DISABLE_ESLINT=true roadhog build",
-    "build:test0": "cross-env NODE_STAGE=test0 DISABLE_ESLINT=true roadhog build",
-    "build:test1": "cross-env NODE_STAGE=test1 DISABLE_ESLINT=true roadhog build",
-    "build:reg": "cross-env NODE_STAGE=reg DISABLE_ESLINT=true roadhog build",
+    "build:test": "cross-env NODE_STAGE=test DISABLE_ESLINT=true roadhog build",
     "build:stage": "cross-env NODE_STAGE=stage DISABLE_ESLINT=true roadhog build",
-    "build:perf": "cross-env NODE_STAGE=perf DISABLE_ESLINT=true roadhog build",
     "build:prod": "cross-env DISABLE_ESLINT=true roadhog build"
   },
 }
-```
-
-调试时使用以下命令，`DEBUG` 的值可以是布尔的字符串值，也可以是服务器的接口地址，根据自己的需要去解析：
-
-```bash
-$ cross-env DEBUG=http://192.168.x.x:8888/ npm run start
 ```
 
 
@@ -255,51 +198,33 @@ $ cross-env DEBUG=http://192.168.x.x:8888/ npm run start
 * 各环境常量可以变化，但业务逻辑必须高度一致，否则测试环境只能是摆设。
 
 
-
 ## 相关实践
 
-### 按配置动态生成 HTML（Roadhog 配置方式）
+### 按配置生成 HTML
 
-使用 OAuth 开发的单点登录应用会有一个 `refresh.html` 文件，这个文件会调取服务端接口更新会话状态。它内部有一个服务器地址，我们希望这个地址可以从配置文件中读取。我们可以添加 `webpack.config.js` 文件，Roadhog 工具可以通过这个文件对最后实例化的配置进行修改。我们使用 [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin) 插件来生成 HTML，首先需要安装它：
-
-```bash
-$ npm install -D html-webpack-plugin
-```
-
-然后在获取到 Webpack 实例化配置时，将该插件追加到 `webpackConfig.plugins` 插件列表中，此时 `refresh.html` 重定向服务器地址便可从配置文件中拿取。
+比如某些单点登录应用会有一个 `refresh.html` 文件，这个文件会调取服务端接口更新会话状态。它的地址是硬编码到 HTML 文件中的。我们希望这个地址可以从配置文件中读取。我们使用 [HtmlWebpackPlugin](https://github.com/jantimon/html-webpack-plugin) 插件来生成 HTML。
 
 ```javascript
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// 此文件根据 NODE_STAGE 环境变量标识导出不同配置
 const constant = require('./src/common/constant');
 
-module.exports = function (webpackConfig, env) {
-  if (Array.isArray(webpackConfig.plugins)) {
-    webpackConfig.plugins.push(new HtmlWebpackPlugin({
-      title: 'App',
-      filename: 'refresh.html',
-      template: './src/index.ejs',
-      inject: false,
-      refresh: `0; url=${constant.REDIRECT}`,
-    }));
-  }
-  return webpackConfig;
-};
+// ....
+new HtmlWebpackPlugin({
+  title: 'App',
+  filename: 'refresh.html',
+  template: './src/index.ejs',
+  inject: false,
+  meta: {
+    refresh: {
+      'http-equiv': 'refresh',
+      content: `0; url=${constant.toUrl}`,
+    },
+  },
+});
+// ....
 ```
 
-在上面的步骤中已经拿到了配置信息，而下面这一步是修改 HTML 模板将内容生成出来。`src` 目录下有一个 `index.ejs` 文件，这是 `index.html` 的模板文件。现在我们需要生成 `refresh.html` 文件，与 `index.html` 共用一个模板文件，所以将下面内容添加到 `src/index.ejs` 文件 `head` 元素中。
-
-```htmlbars
-  <!-- ... -->
-  <% if (htmlWebpackPlugin.options.refresh) { %>
-  <meta http-equiv="refresh" content="<%= htmlWebpackPlugin.options.refresh %>">
-  <% } %>
-  <title><%= htmlWebpackPlugin.options.title %></title>
-  <!-- ... -->
-```
-
-
-
-编译完成后生成的 `refresh.html` 文件重定向地址为常量文件中配置的值。
+编译完成后生成的 `refresh.html` 文件硬编码地址为对应环境地址。
 
 ```html
   <!-- ... -->
@@ -307,76 +232,3 @@ module.exports = function (webpackConfig, env) {
   <title>App</title>
   <!-- ... -->
 ```
-
-### 正确获取开发环境 Host 地址，并用浏览器自动打开该地址（Roadhog 配置方式）:
-
-多数构建工具开发模式下启动时都会从浏览器中自动打开，但一般都是以 `localhost` 作为访问地址，或者以 IP 地址作为 Host 时，在有多个虚拟网卡的情况下获取的 IP 地址往往不是我们想要的地址。如果移动设备或其他设备访问当前的服务，在进行登录跳转时就会跳到不能访问的地址，导致应用无法访问或登录。
-
-那么我们就自己动手去获取想要的地址，动手之前先禁用工具默认打开浏览器的行为。给 npm scripts 中 `start` 与 `start:no-proxy` 命令设置 `BROWSER` 环境变量，并且它的值为 `none`。[Roadhog 环境变量文档](https://github.com/sorrycc/roadhog/blob/master/README_zh-cn.md#环境变量)，如下所示：
-
-```bash
-$ cross-env DISABLE_ESLINT=true BROWSER=none roadhog dev
-```
-
-现在我们就获取主机地址，在编译环境中通过 Node.js 的 `os` 模块来获取，在运行环境中通过 `window` 对象的 `location.hostname` 来获取。由于我的 `src/common/constant.js` 配置文件同时在编译环境与运行环境中使用，所以这里使用了 `UMD` 方式的代码结构：
-
-```javascript
-let host = 'localhost';
-(() => {
-  if (typeof exports === 'object') {
-    /* eslint-disable */
-    const os = require('os');
-    /* eslint-enable */
-    const ifaces = os.networkInterfaces();
-    Object.keys(ifaces).forEach((keyName) => {
-      if (/vmware/gi.test(keyName)
-        || /docker/gi.test(keyName)
-        || /vboxnet/gi.test(keyName)
-        || /br/gi.test(keyName)) {
-        return;
-      }
-      ifaces[keyName].forEach(({ family, internal, address }) => {
-        if (family === 'IPv4' && !internal) {
-          host = address;
-        }
-      });
-    });
-  } else {
-    host = global.location.hostname;
-  }
-})();
-console.log('host:', host);
-```
-
-最后安装 [open-browser-webpack-plugin](https://github.com/baldore/open-browser-webpack-plugin) 这个插件：
-
-```bash
-$ npm install -D open-browser-webpack-plugin
-```
-
-添加或修改 `webpack.config.js` 文件，为该插件传入 URL 参数，并将实例化的对象追加到 Webpack 插件列表实例中。
-
-```javascript
-const OpenBrowserPlugin = require('open-browser-webpack-plugin');
-const constant = require('./src/common/constant');
-
-module.exports = function (webpackConfig) {
-  if (Array.isArray(webpackConfig.plugins)) {
-    webpackConfig.plugins.push(new OpenBrowserPlugin({
-      url: constant.HOST_URL,
-    }));
-  }
-  return webpackConfig;
-};
-```
-
-
-## 最后
-
-希望本文的内容能对你有所价值，如有疑问或指教欢迎在评论中指出。
-
-日期： 2018年4月28日
-
-更新： 2018年8月28日
-
-（完）
