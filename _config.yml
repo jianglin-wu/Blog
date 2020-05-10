@@ -17,10 +17,10 @@ root: /
 permalink: :year/:month/:title/
 permalink_defaults:
 
-cdn:
-  enable: true
-  base: //blog-cdn.hahhub.com/
-  # tail: v20190320
+# cdn:
+#   enable: true
+#   base: //blog-cdn.hahhub.com/
+#   # tail: v20190320
 
 # Directory
 source_dir: source
